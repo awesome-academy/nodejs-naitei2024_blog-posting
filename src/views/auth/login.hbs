@@ -1,16 +1,21 @@
-<form action="/login" method="POST" autocomplete="on">
-  <h1>Login</h1>
-  <div>
-    <label for="Email">Your Email</label>
-    <input type="email" name="email" id="email" placeholder="example@domain" required>
-  </div>
-  <div>
-    <label for="Password">Password</label>
-    <input type="password" name="password" id="password" placeholder="********" required>
-  </div>
-  <section>
-    <button type="submit">Login</button>
-    <a href="/register"> Don't have an account? </a>
-  </section>
-  <button onclick="showDialog()"> Forgot Password? </button>
-</form>
+<div class="auth-form">
+  <form method="POST" action="login" autocomplete="on">
+    <div class="form-group">
+      <input type="text" name="usernameOrEmail" id="usernameOrEmail" class="form-control item" placeholder="Your Username or Email" value="{{user.usernameOrEmail}}">
+    </div>
+    <div class="form-group">
+      <input type="password" name="password" id="password" class="form-control item" placeholder="Password" value="{{user.password}}">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-block create-account">Login</button>
+    </div>
+    <p>Don't have an account? <a href="/register">Register</a> now.</p>
+    {{#if errors}}
+    <ul>
+      {{#each errors}}
+        <li class="li text-danger">{{this.msg}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </form>
+</div>

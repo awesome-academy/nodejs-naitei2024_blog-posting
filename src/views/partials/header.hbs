@@ -4,12 +4,17 @@
       <a href="/"><h1><img src="logo.png"></h1></a>
     </div>
     <nav class="header--inner--gnav">
+      <!-- This list should change dynamically based on user role.-->
       <ul class="clearfix">
-        <!-- This list should change dynamically based on user role. -->
-        <li><a href="/"> HOMEPAGE </a></li>
-        <li><a href="/posts"> POSTS </a></li>
-        <li><a href="/me"> MY PROFILE </a></li>
-        <li><a href="/logout"> LOG OUT </a></li>
+        <li><a href="/">Homepage</a></li>
+        <li><a href="/users">Users</a></li>
+        {{#if userRole}}
+          <li><a href="/me">My Profile</a></li>
+          <li><a href="/logout">Log Out</a></li>
+        {{/if}}
+        {{#unless userRole}}
+          <li><a href="/login">Log In</a></li>
+        {{/unless}}
       </ul>
     </nav>
   </div>

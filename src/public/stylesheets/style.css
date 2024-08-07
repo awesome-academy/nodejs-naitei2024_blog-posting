@@ -1532,77 +1532,42 @@ main{
         right:15%
     }
 }
-.project main .main--inner{
-    position:relative
+.auth-form {
+  padding: 50px 0;
 }
-.project main .main--inner:before{
-    content:'';
-    display:block;
-    padding-top:52%
+
+.auth-form form {
+  background-color: #fff;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+  margin: auto;
+  max-width: 600px;
+  padding: 50px 70px;
 }
-.project main .lead{
-    background-color:#f2fafd;
-    padding:120px 0 80px 0
+
+.auth-form .item {
+  font-size: 18px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+  padding: 20px 40px;
 }
-.project main .lead--inner{
-    text-align:center
+
+.auth-form .create-account {
+  background-color: #f34334;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 10px 20px;
 }
-.project main .lead--inner h3{
-    font-size:3.4rem;
-    line-height:1.4;
-    font-family:"Noto Sans Japanese";
-    font-weight:200;
-    color:#f34334;
-    letter-spacing:.08em
+
+.li {
+  list-style-type: none;
 }
-.project main .lead--inner h3 span{
-    letter-spacing:-.2em
-}
-.project main .lead--inner h4{
-    font-size:2.1rem;
-    line-height:1.4;
-    font-family:"Noto Sans Japanese";
-    font-weight:200;
-    color:#f34334;
-    letter-spacing:.08em
-}
-.project main .lead--inner h4 span{
-    letter-spacing:-.2em
-}
-.project main .lead--inner p{
-    margin-top:38px;
-    font-size:1.5rem;
-    font-family:"Noto Sans Japanese";
-    line-height:2;
-    color:#403f41
-}
-.project main .contents{
-    margin-top:110px
-}
-@media screen and (max-width:767px){
-    .project main .lead{
-        padding:60px 0 40px 0
-    }
-    .project main .lead--inner h3{
-        font-size:5.4vw;
-        line-height:1.4;
-        letter-spacing:.02em
-    }
-    .project main .lead--inner h4{
-        font-size:4.2vw;
-        line-height:1.4;
-        letter-spacing:.02em
-    }
-    .project main .lead--inner p{
-        font-size:3.6vw;
-        text-align:left;
-        width:90%;
-        margin:30px auto 0 auto
-    }
-    .project main .lead--inner p br{
-        display:none
-    }
-    .project main .contents{
-        margin-top:50px
-    }
+
+.home-image .image-container {
+  max-width: 80%;
 }
