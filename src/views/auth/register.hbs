@@ -1,0 +1,26 @@
+<div class="auth-form">
+  <form method="POST" action="register">
+    <div class="form-group">
+      <input type="text" name="username" id="username" class="form-control item" placeholder="username" value="{{user.username}}">
+    </div>
+    <div class="form-group">
+      <input type="text" name="email" id="email" class="form-control item" placeholder="example@domain" value="{{user.email}}">
+    </div>
+    <div class="form-group">
+      <input type="password" name="password" id="password" class="form-control item" placeholder="Password (at least 8 characters)" value="{{user.password}}">
+    </div>
+    <div class="form-group">
+      <input type="password" name="confirm_password" id="confirm_password" class="form-control item" placeholder="Confirm Password" value="">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-block create-account">Create Account</button>
+    </div>
+    {{#if errors}}
+    <ul>
+      {{#each errors}}
+        <li class="li text-danger">{{this.msg}}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </form>
+</div>
