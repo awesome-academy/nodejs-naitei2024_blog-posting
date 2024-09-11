@@ -20,22 +20,27 @@
         {{/if}}
         {{/if}}
 
-        {{#if userRole}}{{#unless isOwner}}{{#if userActive}}
-        <li class="nav-item">
-          <a class="btn btn-primary btn-lg" href="#">{{ t 'menu.follow' }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-success btn-lg" href="#">{{ t 'menu.subscribe' }}</a>
-        </li>
-        {{/if}}{{/unless}}{{/if}}
+        {{#if userRole}}
+          {{#unless isOwner}} <!-- Hide the follow button if viewing own profile -->
+            {{#if userActive}}
+              {{#if isFollowing}}
+              <li class="nav-item">
+                <button class="btn btn-warning btn-lg unfollow-btn" data-user-id="{{ user.id }}" data-action="unfollow">{{ t 'menu.unfollow' }}</button>
+              </li>
+              {{else}}
+              <li class="nav-item">
+                <button class="btn btn-primary btn-lg follow-btn" data-user-id="{{ user.id }}" data-action="follow">{{ t 'menu.follow' }}</button>
+              </li>
+              {{/if}}
+              <li class="nav-item">
+                <a class="btn btn-success btn-lg" href="#">{{ t 'menu.subscribe' }}</a>
+              </li>
+            {{/if}}
+          {{/unless}}
+        {{/if}}
 
         {{#if isAdmin}}
           {{#unless userAdmin}}
-            {{#if userActive}}
-            <li class="nav-item">
-              <a class="btn btn-danger btn-lg" href="/users/{{user.id}}/assign-admin">{{ t 'menu.assignAdmin' }}</a>
-            </li>
-            {{/if}}
             <form class="form" method="POST" action="/users/update/status">
               <div class="form-group">
                 <input type="hidden" class="form-control item" id="id" name="id" value="{{ user.id }}">
@@ -52,7 +57,6 @@
     </nav>
 
     <!-- Update Profile & Password forms -->
-    <!-- can be shown or hidden by clicking the "Edit" button. -->
     {{#if isOwner}}
     <form id="edit-profile-form" class="d-none auth-form" method="POST" action="/users/update/profile">
       <div class="form-group">
@@ -75,6 +79,7 @@
       <button type="submit" class="btn btn-primary btn-lg">{{ t 'content.updatePassword' }}</button>
     </form>
     {{/if}}
+
     <!-- Show user's posts -->
     <div class="blog-list">
       {{#if userActive}}
@@ -130,5 +135,3 @@
   </div>
 </div>
 <script src="/js/script.js"></script>
-
-

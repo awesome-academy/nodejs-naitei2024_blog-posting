@@ -45,7 +45,8 @@
     "bookmark": "Bookmark",
     "latestPost": "See latest posts",
     "addNewUser": "Add New User",
-    "update": "Update"
+    "update": "Update",
+    "unfollow": "Unfollow"
   },
   "content" : {
     "username": "Username",

@@ -17,6 +17,16 @@
                     </span>
                 </div>
             </a>
+            {{!-- Check if this is not the current user before showing follow/unfollow buttons --}}
+            {{#unless (eq this.userId ../currentUserId)}}
+            <div class="follow-action">
+                {{#if (isFollowing this ../followingUsers)}}
+                    <button class="btn-unfollow" data-user-id="{{this.userId}}">{{ t 'menu.unfollow' }}</button>
+                {{else}}
+                    <button class="btn-follow" data-user-id="{{this.userId}}">{{ t 'menu.follow' }}</button>
+                {{/if}}
+            </div>
+            {{/unless}}
         </div>
         {{/each}}
     </div>
@@ -42,3 +52,5 @@
       </div>
     </nav>
 </div> 
+<script src="/js/script.js"></script>
+

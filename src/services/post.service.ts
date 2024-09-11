@@ -1,4 +1,4 @@
-import { Not } from 'typeorm';
+import { In, Not } from 'typeorm';
 import { AppDataSource } from '../config/data-source';
 import { PostVisibility } from '../constants/post-visibility';
 import { CreatePostDto } from '../dtos/post/create-post.dto';
@@ -10,6 +10,7 @@ import { TagService } from './tag.service';
 import { PAGE_SIZE } from '../constants/post-constant';
 import { extractIMG } from '../utils';
 import Fuse from 'fuse.js'
+import { User } from '../entities/user.entity';
 
 const userService = new UserService();
 const tagService = new TagService();
@@ -17,6 +18,7 @@ const tagService = new TagService();
 export class PostService {
   private postRepository = AppDataSource.getRepository(Post);
   private postStatsRepository = AppDataSource.getRepository(PostStats);
+  private userRepository = AppDataSource.getRepository(User);
 
   async getPostById(userId: number | undefined, postId: number) {
     const post = await this.postRepository.findOne({
@@ -136,21 +138,36 @@ export class PostService {
   async getFYPPosts(userId: number, page: number = 1) {
     const pageSize = PAGE_SIZE;
     const offset = (page - 1) * pageSize;
-    
+  
+    // Retrieve the current user's following list
+    const following = await this.userRepository.findOne({
+      where: { userId },
+      relations: ['following']
+    });
+  
+    if (!following) {
+      throw new Error('User not found');
+    }
+  
+    const followingIds = following.following.map(user => user.userId);
+  
+    // Find posts from the users the current user is following, as well as their own posts
     const posts = await this.postRepository.find({
       relations: ['user'],
       where: [
-        // Retrieve public or pinned posts from other users
-        { user: { userId: Not(userId) }, visible: PostVisibility.PUBLIC },
-        { user: { userId: Not(userId) }, visible: PostVisibility.PINNED },
-        { user: { userId } }, // All posts from the current user
+        // Posts from followed users
+        { user: { userId: In(followingIds) }, visible: In([PostVisibility.PUBLIC, PostVisibility.PINNED]) },
+        // Posts from the current user
+        { user: { userId } }
       ],
-      order: { createdAt: 'DESC' }, 
-      skip: offset, 
-      take: pageSize, 
+      order: { createdAt: 'DESC' },
+      skip: offset,
+      take: pageSize,
     });
+  
     return posts;
   }
+  
 
   async create(createPostDto: CreatePostDto, userId: number): Promise<Post> {
     const user = await userService.getUserById(userId);

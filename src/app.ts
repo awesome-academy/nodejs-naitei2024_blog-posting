@@ -11,6 +11,7 @@ import indexRouter from './routes/index';
 import { config } from 'dotenv';
 import { AppDataSource } from './config/data-source';
 import handlebarsHelpers from 'handlebars-helpers';
+import { User } from './entities/user.entity';
 config();
 
 const app = express();
@@ -36,6 +37,11 @@ app.use(i18nextMiddleware.handle(i18next));
 hbs.registerHelper('t', (key: string) => {
   return i18next.t(key);
 });
+
+hbs.registerHelper('isFollowing', function(user: User, followingUsers: Array<User>) {
+  return followingUsers.some(followingUser => followingUser.userId === user.userId);
+});
+
 
 app.use(
   session({

@@ -13,10 +13,13 @@ import { validateSessionRole,
         validateActiveUser,
         sanitizeContent } from '../utils/';
 import { PostService } from '../services/post.service';
+import { FollowService } from '../services/follow.service';
+import { User } from '../entities/user.entity';
 import { PostVisibility } from '../constants/post-visibility';
 
 const userService = new UserService();
 const postService = new PostService();
+const followService = new FollowService();
 
 async function validateUserById(req: Request, res: Response) {
   const id = parseInt(req.params.id);
@@ -36,9 +39,18 @@ export const getUsers = asyncHandler(async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1;
   try {
     const users = await userService.getAllUsers(page);
+    const currentUserId = req.session.user?.id;
+
+    let followingUsers: User[] = [];
+    if (req.session.user) {
+      followingUsers = await followService.getFollowing(req.session.user?.id);
+    }
+
     res.render('users/index', {
       title: t ('title.users'),
       users: users,
+      followingUsers: followingUsers,
+      currentUserId: currentUserId,
       userRole: req.session.user?.role,
       userStatus: UserStatus,
       isAdmin: validateAdminRole(req),
@@ -61,8 +73,12 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
   const sanitizedPosts = posts.map(post => ({
     ...post,
     content: sanitizeContent(post.content)
-  }));;
-  // Admin and page owner can Edit profile.
+  }));
+  let isFollowing = false;
+  if (req.session.user) {
+    isFollowing = await followService.isFollowing(req.session.user?.id, id);
+  }
+  
   res.render('users/show', {
     title: 'title.userProfile',
     postVisibility: PostVisibility,
@@ -72,6 +88,7 @@ export const getUserById = asyncHandler(async (req: Request, res: Response) => {
     userRole: req.session.user?.role,
     userPosts: sanitizedPosts,
     userStatus: UserStatus,
+    isFollowing: isFollowing,
     isOwner: id == req.session.user?.id,
     isAdmin: validateAdminRole(req)
   });

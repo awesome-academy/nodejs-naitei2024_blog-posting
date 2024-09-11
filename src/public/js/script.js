@@ -76,4 +76,24 @@ $(document).ready(function() {
     $('#commentForm').toggle();
   });
 
+  $('.btn-follow, .btn-unfollow, .follow-btn, .unfollow-btn').on('click', function() {
+    const userId = $(this).data('user-id');
+    const isFollowBtn = $(this).hasClass('btn-follow') || $(this).hasClass('follow-btn');
+    const url = isFollowBtn ? `/follow/follow/${userId}` : `/follow/unfollow/${userId}`;
+    const actionText = isFollowBtn ? 'followed' : 'unfollowed';
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        success: function() {
+            alert(`User ${actionText} successfully`);
+        },
+        error: function() {
+            alert(`Error ${actionText === 'followed' ? 'following' : 'unfollowing'} user`);
+        }
+    });
+  });
+
+
+  
 });
