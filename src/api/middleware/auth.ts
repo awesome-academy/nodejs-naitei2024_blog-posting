@@ -21,3 +21,14 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     return res.status(401).json({ success: false, errors: ['Invalid token'] });
   }
 };
+
+export function getUserIdFromRequest(req: Request): number {
+  const authorizationHeader = req.header('Authorization');
+  if (!authorizationHeader) {
+    return 0;
+  }
+  const token = authorizationHeader.replace('Bearer ', '');
+  const decoded = jwt.verify(token, TOKEN_SECRET);
+  req.user = decoded;
+  return parseInt(req.user['userId']) || 0;
+}

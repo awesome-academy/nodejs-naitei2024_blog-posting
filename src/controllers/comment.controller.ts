@@ -40,7 +40,8 @@ export const deleteComment = [
   isAuthenticated,
   asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const commentId = parseInt(req.params.commentId, 10);
-    await commentService.deleteComment(commentId);
+    const currentUserId = req.session.user?.id || 0;
+    await commentService.deleteComment(commentId, currentUserId);
     res.status(204).send();
   })
 ];

@@ -3,17 +3,13 @@ import asyncHandler from 'express-async-handler';
 import { CreatePostDto } from '../../../dtos/post/create-post.dto';
 import { PostDto } from '../../../dtos/post/post.dto';
 import { handleValidationErrors } from '../../../dtos/validate';
-import { authenticate } from '../../middleware/auth';
+import { authenticate, getUserIdFromRequest } from '../../middleware/auth';
 import { plainToClass } from 'class-transformer';
 import { mapTagsToTagEntities,
         mapTagEntitiesToTags } from '../../../utils';
 import { PostService } from '../../../services/post.service';
 
 const postService = new PostService();
-
-function getUserIdFromRequest(req: Request): number {
-  return req.user && typeof req.user === 'object' ? req.user['userId'] || 0 : 0;
-}
 
 export const getPosts = asyncHandler(async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string, 10) || 1;

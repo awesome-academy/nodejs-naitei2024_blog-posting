@@ -59,6 +59,29 @@ export class CommentService {
     return savedComment;
   }
 
+  async updateComment(
+    commentId: number,
+    commentData: Partial<Comment>,
+    userId: number
+  ): Promise<Comment> {
+    const comment = await this.getCommentById(commentId);
+
+    if (!comment) {
+      throw new Error('Comment not found');
+    }
+
+    if (comment.user.userId !== userId) {
+      throw new Error('Unauthorized: You can only update your own comments');
+    }
+
+    // Update comment fields
+    comment.content = commentData.content || comment.content;
+    
+    const updatedComment = await this.commentRepository.save(comment);
+
+    return updatedComment;
+  }
+
   async getCommentsByPost(userId: number | undefined, postId: number): Promise<Comment[]> {
 
     const post = await postService.getPostById(userId, postId);
@@ -73,8 +96,11 @@ export class CommentService {
     });
   }
 
-  async deleteComment(commentId: number): Promise<void> {
+  async deleteComment(commentId: number, currentUserId: number): Promise<void> {
     const comment = await this.getCommentById(commentId);
+    if (comment.user.userId !== currentUserId) {
+      throw new Error('Unauthorized: You can only delete your own comments');
+    }
     await actionService.updatePostStats(comment.post.postId, false, ActionType.COMMENT);
     await this.commentRepository.delete(commentId);
   }

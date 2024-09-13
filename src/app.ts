@@ -8,6 +8,7 @@ import flash from 'connect-flash';
 import i18next from "./i18n";
 import i18nextMiddleware from "i18next-http-middleware";
 import indexRouter from './routes/index';
+import apiRouter from './api/routes/api.route';
 import { config } from 'dotenv';
 import { AppDataSource } from './config/data-source';
 import handlebarsHelpers from 'handlebars-helpers';
@@ -49,6 +50,7 @@ app.use(
 app.use(flash());
 
 app.use('/', indexRouter);
+app.use('/api', apiRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
